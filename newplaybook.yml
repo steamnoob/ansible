@@ -1,0 +1,27 @@
+ - hosts: [VBox]
+  
+   tasks:
+   - name: update cache
+     ansible.builtin.apt:
+       update_cache: yes
+     become: yes
+     tags: update
+
+   - name: install packages
+     ansible.builtin.apt:
+       name: [git, nodejs]
+       state: latest
+     become: yes
+     tags: install
+
+   - name: create users
+     ansible.builtin.user:
+       create_home: true
+       group: users
+       name: 
+         - putin
+         - peskov
+         - pidor
+     become: yes
+     tags: create_users
+         

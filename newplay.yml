@@ -1,0 +1,25 @@
+ - hosts: VBox
+   tasks:
+   - name: install nxinx
+     ansible.builtin.apt:
+       name: nginx
+       state: latest
+     become: yes
+
+   - name: copy index and config
+     ansible.builtin.copy: 
+       src: "{{ item.src }}"
+       dest: "{{ item.dest }}"
+     loop:
+     - src: ./index.html
+       dest: /usr/share/nginx/html/index.html
+     - src: nginx.conf
+       dest: /etc/nginx/nginx.conf
+     notify: copy
+     become: yes
+   handlers:
+   - name: copy
+     ansible.builtin.service:
+       name: nginx
+       state: reloaded
+     become: yes
